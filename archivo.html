@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEATHFISH | Archivo</title>
     <style>
-        /* Estilos Base Heredados de Inicio */
+        /* Estilos Base Heredados */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
         
         body { 
@@ -23,68 +23,41 @@
             min-height: 100vh;
             width: 100%;
             padding-bottom: 100px;
-            transition: all 0.3s ease;
+            transition: all 0.5s ease; /* Transición suave del blur */
         }
 
-        /* Efecto al abrir: 30% más oscuro y difuminado */
         .blur-effect { 
             filter: blur(8px); 
-            background-color: rgba(0, 0, 0, 0.9); /* Oscurece el fondo original */
+            background-color: rgba(0, 0, 0, 0.9); 
         }
 
         header { padding: 40px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
         .logo { font-size: 3.5rem; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 20px; }
         
         nav ul { display: flex; justify-content: center; list-style: none; border-top: 1px solid rgba(255, 255, 255, 0.2); border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding: 10px 0; }
-        nav li { display: flex; align-items: center; }
         nav li:not(:last-child)::after { content: "|"; margin: 0 15px; color: #888; }
         nav a { text-decoration: none; color: #fff; text-transform: uppercase; font-size: 0.9rem; font-weight: bold; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-
-        .section-title {
-            font-size: 3rem;
-            text-transform: uppercase;
-            margin: 40px 0;
-            font-style: italic;
-            border-bottom: 2px solid #fff;
-            display: inline-block;
-        }
+        .section-title { font-size: 3rem; text-transform: uppercase; margin: 40px 0; font-style: italic; border-bottom: 2px solid #fff; display: inline-block; }
 
         /* Grid de Carpetas */
-        .archive-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
-
-        .folder-card {
-            cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.4);
-            transition: transform 0.3s;
-        }
-
+        .archive-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .folder-card { cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.2); padding: 15px; background: rgba(0, 0, 0, 0.4); transition: 0.3s; }
         .folder-card:hover { transform: scale(1.03); border-color: #ff0000; }
-
-        .folder-thumb {
-            width: 100%;
-            aspect-ratio: 16/9;
-            object-fit: cover;
-            margin-bottom: 15px;
-        }
+        .folder-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; margin-bottom: 15px; }
 
         /* Visor de Imágenes (Lightbox) */
         .lightbox {
-            display: none; /* Oculto por defecto */
+            display: none; 
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.3); /* Solo 30% de oscurecimiento sobre el blur */
+            background: rgba(0, 0, 0, 0.5); 
             z-index: 9999;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(5px); /* Suavizado extra del fondo */
         }
 
         .lightbox-content {
@@ -92,49 +65,68 @@
             width: 90%;
             max-width: 1000px;
             display: flex;
-            justify-content: center;
+            flex-direction: column; /* Para poner el contador arriba */
             align-items: center;
+        }
+
+        /* DISEÑO DEL CONTADOR */
+        .img-counter {
+            background: rgba(255, 0, 0, 0.8);
+            color: #fff;
+            padding: 5px 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            border-radius: 2px;
+            letter-spacing: 2px;
         }
 
         .lightbox-img {
             max-width: 100%;
-            max-height: 80vh;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 50px #000;
+            max-height: 75vh;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            transition: opacity 0.3s ease; /* Suaviza el cambio de imagen */
         }
 
         .close-btn {
             position: absolute;
-            top: -60px; right: 0;
-            font-size: 3rem;
-            color: #ff0000;
+            top: -50px; right: 0;
+            font-size: 2.5rem;
+            color: #fff;
             cursor: pointer;
+            transition: color 0.3s;
         }
+        .close-btn:hover { color: #ff0000; }
 
-        /* Botones de navegación < y > */
+        /* BOTONES DE NAVEGACIÓN SUAVIZADOS */
         .nav-btn {
             position: absolute;
-            top: 50%;
+            top: 55%;
             transform: translateY(-50%);
-            background: rgba(15, 15, 15, 0.95);
-            color: #ff0000;
-            border: 1px solid #444;
-            padding: 20px 30px;
+            background: rgba(15, 15, 15, 0.7);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 15px 25px;
             cursor: pointer;
-            font-size: 2.5rem;
-            font-family: 'Courier New', Courier, monospace;
-            transition: 0.3s;
+            font-size: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Transición suave */
             z-index: 10000;
         }
 
-        .nav-btn:hover { border-color: #ff0000; background: #000; }
-        .prev { left: -120px; }
-        .next { right: -120px; }
+        .nav-btn:hover { 
+            background: #ff0000; 
+            border-color: #ff0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        }
 
-        @media (max-width: 1100px) {
+        .prev { left: -100px; }
+        .next { right: -100px; }
+
+        @media (max-width: 1200px) {
             .prev { left: 10px; }
             .next { right: 10px; }
-            .nav-btn { padding: 10px 20px; opacity: 0.8; }
+            .nav-btn { padding: 10px 15px; font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -177,9 +169,10 @@
         </div>
     </div>
 
-    <!-- Visor -->
     <div class="lightbox" id="lightbox">
         <div class="lightbox-content">
+            <div id="img-counter" class="img-counter">1/1</div>
+            
             <span class="close-btn" onclick="closeGallery()">&times;</span>
             <button class="nav-btn prev" onclick="changeImg(-1)">&lt;</button>
             <img src="" id="active-img" class="lightbox-img">
@@ -188,32 +181,35 @@
     </div>
 
     <script>
-        // Array de imágenes usando tu placeholder
         const galleries = [
-            ["assets/deathfish-banner.JPG", "assets/deathfish-mexiac.JPG", "assets/poster-1.jpg"
-            , "assets/poster-2.PNG", "assets/poster-3.PNG", "assets/poster-4.PNG", 
-                "assets/poster-5.PNG", "assets/poster-6.PNG"
-            ],
-            
-            ["assets/deathfish-acuario.JPG", "assets/acuario-1.JPG", "assets/acuario-2.JPG"
-                , "assets/acuario-3.JPG", "assets/acuario-4.JPG", "assets/acuario-5.JPG"
-                , "assets/acuario-6.JPG", "assets/acuario-7.JPG", "assets/acuario-8.JPG"
-                , "assets/acuario-9.JPG", "assets/acuario-10.JPG"
-            ],
-
+            ["assets/deathfish-banner.JPG", "assets/deathfish-mexiac.JPG", "assets/poster-1.jpg", "assets/poster-2.PNG", "assets/poster-3.PNG", "assets/poster-4.PNG", "assets/poster-5.PNG", "assets/poster-6.PNG"],
+            ["assets/deathfish-acuario.JPG", "assets/acuario-1.JPG", "assets/acuario-2.JPG", "assets/acuario-3.JPG", "assets/acuario-4.JPG", "assets/acuario-5.JPG", "assets/acuario-6.JPG", "assets/acuario-7.JPG", "assets/acuario-8.JPG", "assets/acuario-9.JPG", "assets/acuario-10.JPG"],
             ["assets/live-pecera.JPG", "assets/deathfish-mexiac.JPG"]
         ];
 
         let currentGal = 0;
         let currentIdx = 0;
 
+        function updateDisplay() {
+            const imgElement = document.getElementById('active-img');
+            const counterElement = document.getElementById('img-counter');
+            
+            // Efecto de suavizado al cambiar imagen
+            imgElement.style.opacity = 0;
+            
+            setTimeout(() => {
+                imgElement.src = galleries[currentGal][currentIdx];
+                // Lógica del contador dinámico
+                counterElement.innerHTML = `${currentIdx + 1} / ${galleries[currentGal].length}`;
+                imgElement.style.opacity = 1;
+            }, 150);
+        }
+
         function openGallery(id) {
             currentGal = id;
             currentIdx = 0;
-            const imgElement = document.getElementById('active-img');
-            imgElement.src = galleries[currentGal][currentIdx];
+            updateDisplay();
             
-            // Mostrar visor y aplicar efectos al fondo
             document.getElementById('lightbox').style.display = 'flex';
             document.getElementById('bg-overlay').classList.add('blur-effect');
         }
@@ -227,16 +223,22 @@
             currentIdx += step;
             if (currentIdx >= galleries[currentGal].length) currentIdx = 0;
             if (currentIdx < 0) currentIdx = galleries[currentGal].length - 1;
-            document.getElementById('active-img').src = galleries[currentGal][currentIdx];
+            updateDisplay();
         }
 
-        // Cerrar al hacer clic fuera de la imagen
         window.onclick = function(event) {
             const lb = document.getElementById('lightbox');
-            if (event.target == lb) {
-                closeGallery();
-            }
+            if (event.target == lb) closeGallery();
         }
+
+        // Navegación con teclado
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('lightbox').style.display === 'flex') {
+                if (e.key === "ArrowRight") changeImg(1);
+                if (e.key === "ArrowLeft") changeImg(-1);
+                if (e.key === "Escape") closeGallery();
+            }
+        });
     </script>
 </body>
 </html>
