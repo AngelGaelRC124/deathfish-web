@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEATHFISH | Stream</title>
     <style>
-        /* Estilos Base Heredados */
+        /* Base y Tipografía */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
         
         body { 
@@ -14,101 +14,160 @@
             background-attachment: fixed; 
             background-position: center;
             color: #fff; 
-            text-align: center; 
+            min-height: 100vh;
         }
 
         .overlay {
-            background-color: rgba(0, 0, 0, 0.6); 
+            background-color: rgba(0, 0, 0, 0.85); 
             min-height: 100vh;
             width: 100%;
-            /* Añadimos un espacio al final de la capa oscura */
-            padding-bottom: 100px; 
+            padding-bottom: 50px;
         }
 
-        header { padding: 40px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
+        header { padding: 40px 20px 0 20px; text-align: center; }
         .logo { font-size: 3.5rem; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 20px; }
         
         nav ul { display: flex; justify-content: center; list-style: none; border-top: 1px solid rgba(255, 255, 255, 0.2); border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding: 10px 0; }
-        nav li { display: flex; align-items: center; }
         nav li:not(:last-child)::after { content: "|"; margin: 0 15px; color: #888; }
         nav a { text-decoration: none; color: #fff; text-transform: uppercase; font-size: 0.9rem; font-weight: bold; }
 
-        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
-
-        .section-title {
-            font-size: 3rem;
-            text-transform: uppercase;
-            margin: 40px 0;
-            font-style: italic;
-            border-bottom: 2px solid #fff;
-            display: inline-block;
-        }
-
-        /* Contenedor visual del Video */
-        .video-link-container {
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto 50px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            overflow: hidden;
-            background: #000;
-            display: block;
-        }
-
-        .video-thumbnail {
-            width: 100%;
-            display: block;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-        }
-
-        .video-link-container:hover .video-thumbnail {
-            opacity: 1;
-        }
-
-        .play-button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            background: rgba(255, 0, 0, 0.8);
-            border-radius: 50%;
+        /* BARRA DE SUB-PESTAÑAS (Navegación de Contenido) */
+        .sub-nav {
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px 0;
             display: flex;
             justify-content: center;
-            align-items: center;
-            font-size: 2rem;
-            color: white;
-            transition: background 0.3s;
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
-        .video-link-container:hover .play-button {
-            background: #ff0000;
-        }
-
-        .channel-link {
-            display: inline-block;
-            margin-top: 20px;
-            margin-bottom: 50px; /* Margen extra para que no pegue abajo */
-            padding: 15px 30px;
-            border: 2px solid #ff0000;
-            color: #ff0000;
-            text-decoration: none;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: all 0.3s;
-        }
-
-        .channel-link:hover {
-            background: #ff0000;
+        .filter-btn {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: #fff;
+            padding: 8px 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            transition: 0.3s;
+            letter-spacing: 2px;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #ff0000;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        /* LAYOUT DE STREAM */
+        .stream-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 25px;
+            padding: 0 20px;
+        }
+
+        /* Reproductor Principal */
+        .main-video-area {
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            background: #050505;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
+        }
+
+        /* Estado "Offline" para LIVE */
+        .live-placeholder {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #1a0000 0%, #000 100%);
+            color: #ff0000;
+            display: none; /* Se activa con JS */
+        }
+
+        .video-info {
+            padding: 25px 0;
+            text-align: left;
+        }
+
+        .video-info h2 { font-size: 1.6rem; color: #ff0000; margin-bottom: 12px; text-transform: uppercase; }
+        .video-info p { color: #aaa; line-height: 1.6; font-size: 0.95rem; }
+
+        /* Sidebar - Playlist Dinámica */
+        .video-sidebar {
+            background: rgba(10, 10, 10, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            height: 600px;
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            font-size: 0.9rem;
+            border-bottom: 1px solid #ff0000;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .playlist-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: left;
+            padding: 5px;
+        }
+
+        .playlist-item:hover { background: rgba(255, 255, 255, 0.05); }
+
+        .playlist-item img {
+            width: 110px;
+            height: 62px;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .playlist-item-info h4 { font-size: 0.7rem; margin-bottom: 4px; color: #fff; text-transform: uppercase; }
+        .playlist-item-info span { font-size: 0.6rem; color: #ff0000; font-weight: bold; }
+
+        /* Barra de scroll personalizada */
+        .video-sidebar::-webkit-scrollbar { width: 5px; }
+        .video-sidebar::-webkit-scrollbar-track { background: #000; }
+        .video-sidebar::-webkit-scrollbar-thumb { background: #ff0000; }
+
+        @media (max-width: 1000px) {
+            .stream-container { grid-template-columns: 1fr; }
+            .video-sidebar { height: auto; }
         }
     </style>
 </head>
 <body>
+
     <div class="overlay">
         <header>
             <div class="logo">DEATHFISH</div>
@@ -123,21 +182,129 @@
             </nav>
         </header>
 
-        <div class="container">
-            <h2 class="section-title">Stream / Video</h2>
-
-            <p style="margin-bottom: 20px; font-style: italic; letter-spacing: 1px;">HAZ CLIC PARA VER EL VIDEO OFICIAL</p>
-            
-            <a href="https://www.youtube.com/watch?v=ZDr03UqGoTw" target="_blank" class="video-link-container">
-                <img src="https://img.youtube.com/vi/ZDr03UqGoTw/maxresdefault.jpg" alt="DEATHFISH Video Preview" class="video-thumbnail">
-                <div class="play-button">▶</div>
-            </a>
-
-            <br>
-            <a href="https://www.youtube.com/@deathfish-band" target="_blank" class="channel-link">
-                IR AL CANAL DE YOUTUBE
-            </a>
+        <div class="sub-nav">
+            <button class="filter-btn" onclick="filterStream('live', this)">Live</button>
+            <button class="filter-btn active" onclick="filterStream('musica', this)">Música</button>
+            <button class="filter-btn" onclick="filterStream('sesiones', this)">Sesiones</button>
+            <button class="filter-btn" onclick="filterStream('blogs', this)">Blogs</button>
         </div>
+
+        <main class="stream-container">
+            <section class="main-video-area">
+                <div class="video-wrapper">
+                    <iframe id="main-player" 
+                            src="https://www.youtube.com/embed/YpXqN_N55Xg" 
+                            allowfullscreen>
+                    </iframe>
+                    <div id="live-screen" class="live-placeholder">
+                        <h2 style="font-size: 2rem; margin-bottom: 10px;">[ OFFLINE ]</h2>
+                        <p style="color: #fff; letter-spacing: 3px;">PRÓXIMO STREAM: PRONTO</p>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h2 id="video-title">SELECCIONA UN VIDEO</h2>
+                    <p id="video-desc">Explora el contenido oficial de la pecera.</p>
+                </div>
+            </section>
+
+            <aside class="video-sidebar">
+                <h3 id="sidebar-label" class="sidebar-title">Playlist</h3>
+                <div id="playlist-container">
+                    
+                    <div class="playlist-item" data-category="musica" onclick="changeVideo('YpXqN_N55Xg', 'LIMERENCE - OFFICIAL VIDEO', 'El primer videoclip oficial de la banda. Una exploración visual de la obsesión.')">
+                        <img src="https://img.youtube.com/vi/YpXqN_N55Xg/mqdefault.jpg">
+                        <div class="playlist-item-info">
+                            <h4>LIMERENCE (VIDEO)</h4>
+                            <span>04:20</span>
+                        </div>
+                    </div>
+
+                    <div class="playlist-item" data-category="sesiones" onclick="changeVideo('YpXqN_N55Xg', 'LIVE AT PECERA (2026)', 'Sesión grabada en vivo con el setlist completo del GDB.')">
+                        <img src="https://img.youtube.com/vi/YpXqN_N55Xg/mqdefault.jpg">
+                        <div class="playlist-item-info">
+                            <h4>LIVE AT PECERA</h4>
+                            <span>24:15</span>
+                        </div>
+                    </div>
+
+                    <div class="playlist-item" data-category="sesiones" onclick="changeVideo('YpXqN_N55Xg', 'ENSAYO ACUARIO', 'Cámaras fijas durante el ensayo previo al show Acuario.')">
+                        <img src="https://img.youtube.com/vi/YpXqN_N55Xg/mqdefault.jpg">
+                        <div class="playlist-item-info">
+                            <h4>ENSAYO ACUARIO</h4>
+                            <span>15:00</span>
+                        </div>
+                    </div>
+
+                    <div class="playlist-item" data-category="blogs" onclick="changeVideo('dQw4w9WgXcQ', 'TRAS BAMBALINAS - EP. 1', 'Cómo se grabaron las guitarras de Limerence en la Facultad.')">
+                        <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg">
+                        <div class="playlist-item-info">
+                            <h4>BLOG: GRABACIÓN</h4>
+                            <span>08:45</span>
+                        </div>
+                    </div>
+
+                    <div class="playlist-item" data-category="blogs" onclick="changeVideo('dQw4w9WgXcQ', 'TOUR DIARY: MÉXICO', 'Vlog de la pequeña gira por festivales locales.')">
+                        <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg">
+                        <div class="playlist-item-info">
+                            <h4>VLOG: TOUR DIARY</h4>
+                            <span>12:30</span>
+                        </div>
+                    </div>
+
+                </div>
+            </aside>
+        </main>
     </div>
+
+    <script>
+        function filterStream(category, btn) {
+            const items = document.querySelectorAll('.playlist-item');
+            const buttons = document.querySelectorAll('.filter-btn');
+            const player = document.getElementById('main-player');
+            const liveScreen = document.getElementById('live-screen');
+            const sidebarLabel = document.getElementById('sidebar-label');
+
+            // Actualizar botones
+            buttons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Actualizar etiqueta lateral
+            sidebarLabel.innerText = "Playlist: " + category.toUpperCase();
+
+            // Lógica especial para LIVE
+            if (category === 'live') {
+                player.style.display = 'none';
+                liveScreen.style.display = 'flex';
+                document.getElementById('video-title').innerText = "TRANSMISIÓN EN VIVO";
+                document.getElementById('video-desc').innerText = "Actualmente no hay una señal activa. Conecta con nuestras redes para saber cuándo es el próximo stream.";
+            } else {
+                player.style.display = 'block';
+                liveScreen.style.display = 'none';
+            }
+
+            // Filtrar items de la playlist
+            items.forEach(item => {
+                if (item.getAttribute('data-category') === category) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function changeVideo(id, title, desc) {
+            const player = document.getElementById('main-player');
+            player.src = "https://www.youtube.com/embed/" + id + "?autoplay=1";
+            document.getElementById('video-title').innerText = title;
+            document.getElementById('video-desc').innerText = desc;
+            window.scrollTo({ top: 150, behavior: 'smooth' });
+        }
+
+        // Inicializar en "Música" al cargar
+        window.onload = () => {
+            const musicBtn = document.querySelector('.filter-btn:nth-child(2)');
+            filterStream('musica', musicBtn);
+        };
+    </script>
 </body>
 </html>
