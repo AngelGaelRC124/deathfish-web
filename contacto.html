@@ -8,13 +8,13 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
        (function(){
-          // Tu Public Key integrada
+          // Tu Public Key configurada
           emailjs.init("Cj-ZKhXqXwh2T1wMK");
        })();
     </script>
 
     <style>
-        /* --- PERSONALIZACIÓN GLOBAL --- */
+        /* --- ESTILOS GLOBALES --- */
         html, body {
             margin: 0; padding: 0; box-sizing: border-box; 
             font-family: 'Courier New', Courier, monospace;
@@ -48,26 +48,11 @@
         
         nav ul { display: flex; justify-content: center; list-style: none; border-top: 1px solid rgba(255, 255, 255, 0.2); border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding: 10px 0; }
         nav li:not(:last-child)::after { content: "|"; margin: 0 15px; color: #888; }
-        nav a { 
-            text-decoration: none; 
-            color: #fff; 
-            text-transform: uppercase; 
-            font-size: 0.9rem; 
-            font-weight: bold; 
-            transition: color 0.3s ease;
-        }
+        nav a { text-decoration: none; color: #fff; text-transform: uppercase; font-size: 0.9rem; font-weight: bold; transition: color 0.3s ease; }
         nav a:hover { color: #ff0000; }
 
         .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
-
-        .section-title {
-            font-size: 3rem;
-            text-transform: uppercase;
-            margin: 40px 0;
-            font-style: italic;
-            border-bottom: 2px solid #fff;
-            display: inline-block;
-        }
+        .section-title { font-size: 3rem; text-transform: uppercase; margin: 40px 0; font-style: italic; border-bottom: 2px solid #fff; display: inline-block; }
 
         /* --- FORMULARIO --- */
         .contact-form {
@@ -76,21 +61,13 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             text-align: left;
             margin-top: 20px;
-            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), border-color 0.3s;
+            transition: 0.4s;
         }
 
-        .contact-form:hover { border-color: rgba(255, 0, 0, 0.5); transform: scale(1.02); }
-
+        .contact-form:hover { border-color: rgba(255, 0, 0, 0.5); transform: scale(1.01); }
         .form-group { margin-bottom: 25px; }
 
-        label {
-            display: block;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            margin-bottom: 8px;
-            letter-spacing: 2px;
-            color: #888;
-        }
+        label { display: block; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 8px; letter-spacing: 2px; color: #888; }
 
         input, textarea {
             width: 100%;
@@ -102,7 +79,7 @@
             font-family: 'Courier New', Courier, monospace;
             font-size: 1rem;
             outline: none;
-            transition: border-color 0.3s;
+            transition: 0.3s;
         }
 
         input::placeholder, textarea::placeholder { color: rgba(255, 0, 0, 0.3); }
@@ -122,11 +99,7 @@
             letter-spacing: 2px;
         }
 
-        .submit-btn:hover {
-            background: #ff0000;
-            color: #fff;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
-        }
+        .submit-btn:hover { background: #ff0000; color: #fff; box-shadow: 0 0 20px rgba(255, 0, 0, 0.4); }
 
         /* --- FOOTER --- */
         footer { border-top: 1px solid rgba(255, 255, 255, 0.1); padding: 50px 20px; background: rgba(0,0,0,0.85); margin-top: 50px; }
@@ -135,11 +108,7 @@
         .social-icons a:hover img { filter: invert(0.2) sepia(1) saturate(10) hue-rotate(-45deg); transform: scale(1.2); }
         .footer-credits { font-size: 0.85rem; color: #888; letter-spacing: 1px; margin-top: 20px; }
 
-        @media (max-width: 480px) {
-            .logo { font-size: 2rem; }
-            .section-title { font-size: 2rem; }
-            .contact-form { padding: 20px; }
-        }
+        @media (max-width: 480px) { .logo { font-size: 2rem; } .section-title { font-size: 2rem; } .contact-form { padding: 20px; } }
     </style>
 </head>
 <body>
@@ -159,9 +128,14 @@
 
         <div class="container">
             <h2 class="section-title">Contacto</h2>
-            <p style="margin-bottom: 30px; font-style: italic; color: #ccc;">Para contrataciones, prensa o dudas sobre la merch.</p>
+            <p style="margin-bottom: 30px; font-style: italic; color: #ccc;">SISTEMA DE COMUNICACIÓN // TERMINAL_V2.0</p>
 
             <form id="contact-form" class="contact-form">
+                <div style="display:none;">
+                    <label>Bot Check</label>
+                    <input type="text" name="user_bot_check" tabindex="-1" autocomplete="off">
+                </div>
+
                 <div class="form-group">
                     <label>Nombre / Organización</label>
                     <input type="text" name="from_name" placeholder="EJ. PECERA RECORDS" required>
@@ -187,7 +161,6 @@
         </div>
 
         <footer>
-            <p style="letter-spacing: 2px;">CONECTA CON LA PECERA</p>
             <div class="social-icons">
                 <a href="https://www.youtube.com/@deathfish-band" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"></a>
                 <a href="https://www.instagram.com/deathfishband/" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384063.png" alt="Instagram"></a>
@@ -204,28 +177,33 @@
          .addEventListener('submit', function(event) {
            event.preventDefault();
 
-           btn.innerText = 'ENVIANDO...';
+           // Honeypot check
+           if (this.user_bot_check.value !== "") return;
+
+           btn.innerText = 'CONECTANDO TERMINAL...';
+           btn.disabled = true;
 
            const serviceID = 'service_4oal3lr';
-           const templateID = 'template_ehko4ye';
+           const templateID = 'template_ehko4ye'; // ID ACTUALIZADO
 
            emailjs.sendForm(serviceID, templateID, this)
             .then(() => {
-              btn.innerText = '¡MENSAJE ENVIADO!';
-              btn.style.backgroundColor = '#ff0000';
-              btn.style.color = '#fff';
-              this.reset(); // Limpia el formulario tras el éxito
-              
-              setTimeout(() => {
-                  btn.innerText = 'ENVIAR MENSAJE';
-                  btn.style.backgroundColor = 'transparent';
-                  btn.style.color = '#ff0000';
-              }, 4000);
-              
+                btn.innerText = '¡MENSAJE ENVIADO! REVISA TU CORREO';
+                btn.style.backgroundColor = '#ff0000';
+                btn.style.color = '#fff';
+                this.reset();
+                
+                setTimeout(() => {
+                    btn.innerText = 'ENVIAR MENSAJE';
+                    btn.style.backgroundColor = 'transparent';
+                    btn.style.color = '#ff0000';
+                    btn.disabled = false;
+                }, 5000);
+                
             }, (err) => {
-              btn.innerText = 'ERROR AL ENVIAR';
-              alert("Hubo un error en la conexión: " + JSON.stringify(err));
-              btn.innerText = 'REINTENTAR';
+                btn.innerText = 'ERROR EN LA CONEXIÓN';
+                btn.disabled = false;
+                console.error(err);
             });
         });
     </script>
