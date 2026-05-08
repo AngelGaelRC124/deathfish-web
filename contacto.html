@@ -69,35 +69,44 @@
 
         label { display: block; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 8px; letter-spacing: 2px; color: #888; }
 
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #ff0000;
-            caret-color: #ff0000;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
-        }
+        /* 1. CLAVE PARA LA SIMETRÍA: Asegurar que el padding no estire los cuadros */
+input, textarea {
+    width: 100%;            /* Ocupa el 100% del ancho del padre */
+    box-sizing: border-box; /* Mantiene el padding y borde HACIA ADENTRO */
+    display: block;
+    padding: 15px;
+    margin-bottom: 25px;    /* Espaciado uniforme entre campos */
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ff0000;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
 
-        input::placeholder, textarea::placeholder { color: rgba(255, 0, 0, 0.3); }
-        input:focus, textarea:focus { border-color: #ff0000; background: rgba(255, 0, 0, 0.05); }
+/* 2. Efecto al hacer clic para que se sienta como terminal activa */
+input:focus, textarea:focus {
+    border-color: #ff0000;
+    background: rgba(255, 0, 0, 0.05);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+}
 
-        .submit-btn {
-            background: transparent;
-            color: #ff0000;
-            border: 2px solid #ff0000;
-            padding: 15px 40px;
-            text-transform: uppercase;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s;
-            font-size: 1rem;
-            letter-spacing: 2px;
-        }
+/* 3. Botón alineado perfectamente con los inputs */
+.submit-btn {
+    width: 100%;
+    box-sizing: border-box;
+    background: transparent;
+    color: #ff0000;
+    border: 2px solid #ff0000;
+    padding: 18px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+}
 
         .submit-btn:hover { background: #ff0000; color: #fff; box-shadow: 0 0 20px rgba(255, 0, 0, 0.4); }
 
@@ -128,7 +137,7 @@
 
         <div class="container">
             <h2 class="section-title">Contacto</h2>
-            <p style="margin-bottom: 30px; font-style: italic; color: #ccc;">SISTEMA DE COMUNICACIÓN // TERMINAL_V2.0</p>
+            <p style="margin-bottom: 30px; font-style: italic; color: #ccc;">CONTACTA CON DEATHFISH</p>
 
             <form id="contact-form" class="contact-form">
                 <div style="display:none;">
